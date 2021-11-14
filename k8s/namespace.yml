@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hello-spring
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hello-database

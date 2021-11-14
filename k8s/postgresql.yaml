@@ -1,0 +1,38 @@
+# PostgreSQL StatefulSet
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/name: postgresql-db
+    namespace: hello-database
+spec:
+  serviceName: postgresql-db-service
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: postgresql-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: postgresql-db
+    spec:
+      containers:
+        - name: postgresql-db
+          image: postgres:latest
+          volumeMounts:
+            - name: postgresql-db-disk
+              mountPath: /data
+          env:
+            - name: POSTGRES_PASSWORD
+              value: 123456789
+            - name: PGDATA
+              value: /data/pgdata
+  # Volume Claim
+  volumeClaimTemplates:
+    - metadata:
+        name: postgresql-db-disk
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 25Gi
